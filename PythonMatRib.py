@@ -23,7 +23,7 @@ def main():
 
     print(wordbank)
 
-    print(f"Python is a {wordbank.get('adj')[1]} language that lets you {wordbank.get('verb')[1]} more {wordbank.get('noun')[2]} and integrate your {wordbank.get('noun')[1]} more effectively. You can learn to {wordbank.get('verb')[2]} Python and see alsmost {wordbank.get('adj')[0]} {wordbank.get('noun')[0]} in productivity and {wordbank.get('verb')[0]} maitenanc costs.")
+    print(f"Python is a {wordbank.get('adj')[1]} language that lets you {wordbank.get('verb')[1]} more {wordbank.get('noun')[2]} and integrate your {wordbank.get('noun')[1]} more effectively. You can learn to {wordbank.get('verb')[2]} Python and see alsmost {wordbank.get('adj')[0]} {wordbank.get('noun')[0]} in productivity and {wordbank.get('verb')[0]} maitenance costs.")
 
 
 
