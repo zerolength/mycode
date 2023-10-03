@@ -1,0 +1,6 @@
+--2023-10-03 16:04:08--  https://storage.googleapis.com/kagglesdsdata/datasets/1032846/1740010/10_million_password_list_top_10000.txt?X-Goog-Algorithm=GOOG4-RSA-SHA256
+Resolving storage.googleapis.com (storage.googleapis.com)... 142.250.64.123, 142.250.72.123, 142.250.80.59, ...
+Connecting to storage.googleapis.com (storage.googleapis.com)|142.250.64.123|:443... connected.
+HTTP request sent, awaiting response... 400 Bad Request
+2023-10-03 16:04:08 ERROR 400: Bad Request.
+
