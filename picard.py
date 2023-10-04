@@ -34,7 +34,7 @@ class Player:
         print(f"Player's age: {self.age}")
         print(f"Player's birthday: {self.birthday.strftime('%Y-%m-%d')}")
         print("Player's conditions: ", ', '.join(self.conditions))
-#        print(f"Path History",': '.join(self.location_history))
+        print("Path History", '-'.join(self.location_history))
 class Consumable:
     def __init__(self, name, quantity, condition_T, condition_K, condition_E, condition_C, condition_Y):
         self.name = name
@@ -106,7 +106,7 @@ player = Player(name=player_name, age=player_age, birthday=player_birthday, cond
 
 # Initialize the player's location to the lobby
 player.location = lobby
-player.location_history.append(player.location)
+player.location_history.append(player.location.name)
 # Main game loop
 while True:
     # Describe the player and the current room
@@ -135,7 +135,7 @@ while True:
                 new_room = player.location.adjacent_rooms[room_choice - 1]
                 player.location = new_room
                 print(f"You have entered the {new_room.name}.")
-#                player.location_history.append(new_room)
+                player.location_history.append(new_room.name)
             else:
                 print("Invalid room choice. Try again.")
         except ValueError:
