@@ -1,9 +1,16 @@
 import re
-from fuzzywuzzy import fuzz
+from thefuzz import fuzz
+from thefuzz import process
 #stregnth testing module
 from password_strength import PasswordPolicy, PasswordStats
 #for color
 import crayons
+
+#fucntion for similar string test , str1 is the smaller/left
+def fuzzycheck(str1, str2)
+    tokenS_ratio = fuzz.token_set_ratio(str1, str2)
+    ratio = fuzz.ratio(str1, str2)
+    match = process.exractOne(str1, str2)
 
 #function for strengh teting, pstrength_test(pwsafe_entity, policy)
 def pstrength_test(pwsafe_entity, policy):
