@@ -80,7 +80,7 @@ class pwsafe_entity:
 
         lenMin = 5
         if renamecheck or simplematch: 
-            print("simplecheck for username failed")
+            print(f"simplecheck for username failed for {crayons.red(self.principal)}")
             return True
         similar_substring = []
         for i in range (len(self.principal)):
@@ -97,8 +97,8 @@ class pwsafe_entity:
                             similar_substring.append(substring1)
 
         if similar_substring:
-            print(f"WARNING: Fuzzy check failed: {crayons.red(similar_substring)}")
-            print(similar_substring)
+            longestmatch = max(similar_substring, key = len)
+            print(f"WARNING: Fuzzy check failed: {crayons.red(longestmatch)}")
             return True
         return False
     #check if link or description is reused and give a warning when it does
@@ -165,7 +165,7 @@ def main():
     #file import and convert to list of Class
     filename = "passwords.txt"  # Replace with the actual filename
     parsed_data = parse_password_file(filename)
-
+    print (parsed_data)
     #ask for manual entry and append to list
     for entry in parsed_data:
         print(f"Username: {entry.principal}")
@@ -184,12 +184,17 @@ def main():
     entity1 = pwsafe_entity("username", "password123username","link","desc")
     entity2 = pwsafe_entity("email@example.com", "securepassword","example.com","email")
     entity3 = pwsafe_entity("je.ff@amazon.com", "Karsutoま0b$$eshun","amazon.co.jp","Amazon JP")    
-    
+    entity4 = pwsafe_entity('username','u5ername','username.com','big one')
+
     print(f"Length of credential 1: {entity1.length()}")
     print(f"Length of credential 2: {entity2.length()}")
 
     print(entity1.reuse_meta([entity2,entity3]))
     print(entity2.reuse_meta([entity1,entity2,entity3]))
+    print(f"entity4 tested: {entity4.reuse_username()}")
+    print(entity4.reuse_identifier())
+
+    
 
 if __name__ == "__main__":
     main()

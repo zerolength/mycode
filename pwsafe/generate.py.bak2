@@ -25,16 +25,7 @@ def generate_random_description():
 
 # Function to generate random password entries
 def generate_password_entries(num_entries):
-    header = [
-        "Group/Title", "Username", "Password", "URL", "AutoType", "Created Time",
-        "Password Modified Time", "Last Access Time", "Password Expiry Date",
-        "Password Expiry Interval", "Record Modified Time", "Password Policy",
-        "Password Policy Name", "History", "Run Command", "DCA", "Shift+DCA", "e-mail",
-        "Protected", "Symbols", "Keyboard Shortcut", "Notes"
-    ]
-
-    entries = [header]
-
+    entries = []
     for i in range(1, num_entries + 1):
         group_title = f"Group/Title{i}"
         username = generate_random_username()
