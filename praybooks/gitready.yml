@@ -1,0 +1,11 @@
+---
+- name: git ready
+  hosts: planetexpress
+  connection: ssh
+  gather_facts: false
+  tasks:
+  - name: "make git from repo"
+    git:
+      repo: https://github.com/ansible/ansible-example.git
+      dest: ~/ansible-demo/
+      archive: ~/ansible-demo.zip

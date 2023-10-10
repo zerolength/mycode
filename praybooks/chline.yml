@@ -1,0 +1,13 @@
+---
+- name: Changing some lines
+  hosts: planetexpress:!farnsworth
+  vars:
+    - fileloc: "/var/log/bootstrap.log"
+  tasks:
+    - name: "Insertion of member into '{{ fileloc }}'"
+      lineinline:
+        path: "{{ fileloc }}"
+        regexp: "^Setting ip lib.*"
+        line: "REDACTED by ansible.line"
+        backup: yes
+      become: true

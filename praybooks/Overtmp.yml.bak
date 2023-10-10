@@ -1,0 +1,29 @@
+---
+- name: Temper the journey to infinity and yonder.
+  hosts: planetexpress
+  gather_facts: no
+
+  vars_files:
+    - ~/mycode/vars/planetexpress.yml
+
+  tasks:
+    - name: registrate ship
+      template:
+        src: templates/ship.cfg.j2
+        dest: ~/ship.cfg
+
+    - name: Pmission briefing
+      template:
+        src: templates/missions.txt.j2
+        dest: ~/missionbrief.txt
+
+    - name: Nmission briefing
+      template:
+        src: templates/missions.txt.j2
+        dst: "~/{{ item.mission }}-brief.txt"
+      vars:
+        planet: "{{ item.planet }}"
+      loop:
+      - {"mission": "primary", "planet": "luna park"}
+      - {"mission": "secondary", "planet": "cineplex 14"}
+ 
