@@ -1,0 +1,36 @@
+---
+- name: bootstrapping and new user creation
+  hosts: raiders
+  gather_facts: no
+
+  vars:
+    newusers:
+    - marian
+    - belloq
+    - willie
+    - elsa
+    - irina
+    - helena
+
+  tasks:
+  - name: update apt repo
+    raw: "apt update -y"
+    become: yes
+  
+  - name: install py3
+    raw: "apt install python3-pip"
+    become: yes
+
+  - name: new grp
+    group:
+      name: indymovies
+      state: present
+      become: yes
+
+  - name: add users
+    user:
+      name: "{{ item }}"
+      state: present
+      group: indymovies
+    become: yes
+    loop: "{{ new users }}"
