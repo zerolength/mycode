@@ -1,0 +1,11 @@
+---
+- name: Playbook with Precheck Role
+  hosts: arista_witches_2        # group within the inventory to match on
+  gather_facts: yes             # this defines ansible_facts
+                            # (it runs *_facts on the target network switches)
+
+  tasks:
+  - name: Import the precheck role
+    import_role:
+      name: precheck
+
