@@ -1,0 +1,30 @@
+---
+- name: how leaky is this spoon?
+  hosts: localhost
+  gather_facts: no
+  vars:
+    jarls: [1,1,1,1,1,1,1,6,7,a]
+    rrrls: [1,2,2,2,4,4,4,4,4,9,9,1,2,3]
+    r22ls: [5,5,5,5,5,5,8,12]
+    narls: [11,12,13,[13,17,23],87]
+
+  tasks:
+    - name: min()
+      debug:
+        msg: "min() '{{jarls | min}}'"
+    - name: max()
+      debug:
+        msg: "max() ' {{jarls | max}}'"
+    - name: パンケーキ
+      debug:
+        msg: "flat is beautiful '{{narls|flatten}}'"
+
+    - name: dedupe
+      debug:
+        msg: "{{ rrrls|unique }}"
+    - name: union
+      debug:
+        msg: "{{ rrrls | union(r22ls)}}"
+    - name: show the diffs between two lists
+      debug:
+        msg: 'Display the diffs of two lists {{ repeatlist|difference(repeat2list) }}'
