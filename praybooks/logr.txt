@@ -1,0 +1,271 @@
+
+PLAY [Playbook with the register keyword] **************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [zoidberg]
+ok: [bender]
+ok: [fry]
+ok: [farnsworth]
+
+TASK [Issue a trivial command] *************************************************
+changed: [fry]
+changed: [zoidberg]
+changed: [bender]
+changed: [farnsworth]
+
+TASK [debug - display data returned] *******************************************
+ok: [bender] => {
+    "msg": {
+        "changed": true,
+        "cmd": [
+            "ls",
+            "/lib/"
+        ],
+        "delta": "0:00:00.010411",
+        "end": "2023-10-11 16:18:46.352062",
+        "failed": false,
+        "msg": "",
+        "rc": 0,
+        "start": "2023-10-11 16:18:46.341651",
+        "stderr": "",
+        "stderr_lines": [],
+        "stdout": "apt\nbinfmt.d\ndbus-1.0\ndpkg\nenvironment.d\ngit-core\ngroff\ninit\nkernel\nlocale\nlsb\nman-db\nmime\nmodprobe.d\nmodules-load.d\nnetworkd-dispatcher\nopenssh\nos-release\npam.d\npython2.7\npython3\npython3.10\nsasl2\nsftp-server\nssl\nsysctl.d\nsystemd\nsysusers.d\ntc\nterminfo\ntmpfiles.d\nudev\nusrmerge\nvalgrind\nx86_64-linux-gnu",
+        "stdout_lines": [
+            "apt",
+            "binfmt.d",
+            "dbus-1.0",
+            "dpkg",
+            "environment.d",
+            "git-core",
+            "groff",
+            "init",
+            "kernel",
+            "locale",
+            "lsb",
+            "man-db",
+            "mime",
+            "modprobe.d",
+            "modules-load.d",
+            "networkd-dispatcher",
+            "openssh",
+            "os-release",
+            "pam.d",
+            "python2.7",
+            "python3",
+            "python3.10",
+            "sasl2",
+            "sftp-server",
+            "ssl",
+            "sysctl.d",
+            "systemd",
+            "sysusers.d",
+            "tc",
+            "terminfo",
+            "tmpfiles.d",
+            "udev",
+            "usrmerge",
+            "valgrind",
+            "x86_64-linux-gnu"
+        ]
+    }
+}
+ok: [fry] => {
+    "msg": {
+        "changed": true,
+        "cmd": [
+            "ls",
+            "/lib/"
+        ],
+        "delta": "0:00:00.005127",
+        "end": "2023-10-11 16:18:46.277568",
+        "failed": false,
+        "msg": "",
+        "rc": 0,
+        "start": "2023-10-11 16:18:46.272441",
+        "stderr": "",
+        "stderr_lines": [],
+        "stdout": "apache2\napt\nbfd-plugins\nbinfmt.d\ncgi-bin\ncompat-ld\ncpp\ndbus-1.0\ndpkg\nenvironment.d\nfile\ngcc\ngit-core\ngnupg\ngnupg2\ngold-ld\ngroff\ninit\nkernel\nlocale\nlsb\nman-db\nmime\nmodprobe.d\nmodules-load.d\nnetworkd-dispatcher\nopenssh\nos-release\npam.d\npython2.7\npython3\npython3.10\npython3.11\nsasl2\nsftp-server\nssl\nsysctl.d\nsystemd\nsysusers.d\ntc\nterminfo\ntmpfiles.d\nudev\nusrmerge\nvalgrind\nx86_64-linux-gnu",
+        "stdout_lines": [
+            "apache2",
+            "apt",
+            "bfd-plugins",
+            "binfmt.d",
+            "cgi-bin",
+            "compat-ld",
+            "cpp",
+            "dbus-1.0",
+            "dpkg",
+            "environment.d",
+            "file",
+            "gcc",
+            "git-core",
+            "gnupg",
+            "gnupg2",
+            "gold-ld",
+            "groff",
+            "init",
+            "kernel",
+            "locale",
+            "lsb",
+            "man-db",
+            "mime",
+            "modprobe.d",
+            "modules-load.d",
+            "networkd-dispatcher",
+            "openssh",
+            "os-release",
+            "pam.d",
+            "python2.7",
+            "python3",
+            "python3.10",
+            "python3.11",
+            "sasl2",
+            "sftp-server",
+            "ssl",
+            "sysctl.d",
+            "systemd",
+            "sysusers.d",
+            "tc",
+            "terminfo",
+            "tmpfiles.d",
+            "udev",
+            "usrmerge",
+            "valgrind",
+            "x86_64-linux-gnu"
+        ]
+    }
+}
+ok: [zoidberg] => {
+    "msg": {
+        "changed": true,
+        "cmd": [
+            "ls",
+            "/lib/"
+        ],
+        "delta": "0:00:00.011357",
+        "end": "2023-10-11 16:18:46.354612",
+        "failed": false,
+        "msg": "",
+        "rc": 0,
+        "start": "2023-10-11 16:18:46.343255",
+        "stderr": "",
+        "stderr_lines": [],
+        "stdout": "apt\nbinfmt.d\ndbus-1.0\ndpkg\nenvironment.d\ngit-core\ngroff\ninit\nkernel\nlocale\nlsb\nman-db\nmime\nmodprobe.d\nmodules-load.d\nnetworkd-dispatcher\nopenssh\nos-release\npam.d\npython2.7\npython3\npython3.10\nsasl2\nsftp-server\nssl\nsysctl.d\nsystemd\nsysusers.d\ntc\nterminfo\ntmpfiles.d\nudev\nusrmerge\nvalgrind\nx86_64-linux-gnu",
+        "stdout_lines": [
+            "apt",
+            "binfmt.d",
+            "dbus-1.0",
+            "dpkg",
+            "environment.d",
+            "git-core",
+            "groff",
+            "init",
+            "kernel",
+            "locale",
+            "lsb",
+            "man-db",
+            "mime",
+            "modprobe.d",
+            "modules-load.d",
+            "networkd-dispatcher",
+            "openssh",
+            "os-release",
+            "pam.d",
+            "python2.7",
+            "python3",
+            "python3.10",
+            "sasl2",
+            "sftp-server",
+            "ssl",
+            "sysctl.d",
+            "systemd",
+            "sysusers.d",
+            "tc",
+            "terminfo",
+            "tmpfiles.d",
+            "udev",
+            "usrmerge",
+            "valgrind",
+            "x86_64-linux-gnu"
+        ]
+    }
+}
+ok: [farnsworth] => {
+    "msg": {
+        "changed": true,
+        "cmd": [
+            "ls",
+            "/lib/"
+        ],
+        "delta": "0:00:00.005452",
+        "end": "2023-10-11 16:18:46.418325",
+        "failed": false,
+        "msg": "",
+        "rc": 0,
+        "start": "2023-10-11 16:18:46.412873",
+        "stderr": "",
+        "stderr_lines": [],
+        "stdout": "binfmt.d\ndebug\ndracut\nenvironment.d\ngames\ngrub\nkbd\nkdump\nkernel\nlocale\nmodprobe.d\nmodules\nmodules-load.d\nos-release\npython3.6\npython3.9\nrpm\nsse2\nsysctl.d\nsysimage\nsystemd\nsysusers.d\ntmpfiles.d\nudev",
+        "stdout_lines": [
+            "binfmt.d",
+            "debug",
+            "dracut",
+            "environment.d",
+            "games",
+            "grub",
+            "kbd",
+            "kdump",
+            "kernel",
+            "locale",
+            "modprobe.d",
+            "modules",
+            "modules-load.d",
+            "os-release",
+            "python3.6",
+            "python3.9",
+            "rpm",
+            "sse2",
+            "sysctl.d",
+            "sysimage",
+            "systemd",
+            "sysusers.d",
+            "tmpfiles.d",
+            "udev"
+        ]
+    }
+}
+
+TASK [debug - standard error] **************************************************
+ok: [bender] => {
+    "msg": ""
+}
+ok: [fry] => {
+    "msg": ""
+}
+ok: [zoidberg] => {
+    "msg": ""
+}
+ok: [farnsworth] => {
+    "msg": ""
+}
+
+TASK [debug - standard out] ****************************************************
+ok: [bender] => {
+    "msg": "apt\nbinfmt.d\ndbus-1.0\ndpkg\nenvironment.d\ngit-core\ngroff\ninit\nkernel\nlocale\nlsb\nman-db\nmime\nmodprobe.d\nmodules-load.d\nnetworkd-dispatcher\nopenssh\nos-release\npam.d\npython2.7\npython3\npython3.10\nsasl2\nsftp-server\nssl\nsysctl.d\nsystemd\nsysusers.d\ntc\nterminfo\ntmpfiles.d\nudev\nusrmerge\nvalgrind\nx86_64-linux-gnu"
+}
+ok: [fry] => {
+    "msg": "apache2\napt\nbfd-plugins\nbinfmt.d\ncgi-bin\ncompat-ld\ncpp\ndbus-1.0\ndpkg\nenvironment.d\nfile\ngcc\ngit-core\ngnupg\ngnupg2\ngold-ld\ngroff\ninit\nkernel\nlocale\nlsb\nman-db\nmime\nmodprobe.d\nmodules-load.d\nnetworkd-dispatcher\nopenssh\nos-release\npam.d\npython2.7\npython3\npython3.10\npython3.11\nsasl2\nsftp-server\nssl\nsysctl.d\nsystemd\nsysusers.d\ntc\nterminfo\ntmpfiles.d\nudev\nusrmerge\nvalgrind\nx86_64-linux-gnu"
+}
+ok: [zoidberg] => {
+    "msg": "apt\nbinfmt.d\ndbus-1.0\ndpkg\nenvironment.d\ngit-core\ngroff\ninit\nkernel\nlocale\nlsb\nman-db\nmime\nmodprobe.d\nmodules-load.d\nnetworkd-dispatcher\nopenssh\nos-release\npam.d\npython2.7\npython3\npython3.10\nsasl2\nsftp-server\nssl\nsysctl.d\nsystemd\nsysusers.d\ntc\nterminfo\ntmpfiles.d\nudev\nusrmerge\nvalgrind\nx86_64-linux-gnu"
+}
+ok: [farnsworth] => {
+    "msg": "binfmt.d\ndebug\ndracut\nenvironment.d\ngames\ngrub\nkbd\nkdump\nkernel\nlocale\nmodprobe.d\nmodules\nmodules-load.d\nos-release\npython3.6\npython3.9\nrpm\nsse2\nsysctl.d\nsysimage\nsystemd\nsysusers.d\ntmpfiles.d\nudev"
+}
+
+PLAY RECAP *********************************************************************
+bender                     : ok=5    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+farnsworth                 : ok=5    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+fry                        : ok=5    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+zoidberg                   : ok=5    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

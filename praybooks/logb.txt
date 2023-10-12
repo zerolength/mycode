@@ -1,0 +1,135 @@
+ ____________________________________________
+< PLAY [Using variables within our Playbook] >
+ --------------------------------------------
+  \     .    _  .    
+   \    |\_|/__/|    
+       / / \/ \  \  
+      /__|O||O|__ \ 
+     |/_ \_/\_/ _\ |  
+     | | (____) | ||  
+     \/\___/\__/  // 
+     (_/         ||
+      |          ||
+      |          ||\   
+       \        //_/  
+        \______//
+       __ || __||
+      (____(____)
+
+ ________________________
+< TASK [Gathering Facts] >
+ ------------------------
+       \
+        \  ....
+          .    ........
+          .            .
+          .             .
+    .......              .........
+    ..............................
+Elephant inside ASCII snake
+
+ok: [fry]
+ok: [bender]
+ok: [zoidberg]
+ok: [farnsworth]
+ __________________________________
+< TASK [Display all ansible_facts] >
+ ----------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
+skipping: [bender]
+skipping: [fry]
+skipping: [zoidberg]
+skipping: [farnsworth]
+ ___________________________________________________
+< TASK [What does ansible_facts.os_family contain?] >
+ ---------------------------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||--WWW |
+                ||     ||
+
+skipping: [bender]
+skipping: [fry]
+skipping: [zoidberg]
+skipping: [farnsworth]
+ _____________________________________________
+< TASK [What does ansible_facts.lsb contain?] >
+ ---------------------------------------------
+      \                    / \  //\
+       \    |\___/|      /   \//  \\
+            /0  0  \__  /    //  | \ \    
+           /     /  \/_/    //   |  \  \  
+           @_^_@'/   \/_   //    |   \   \ 
+           //_^_/     \/_ //     |    \    \
+        ( //) |        \///      |     \     \
+      ( / /) _|_ /   )  //       |      \     _\
+    ( // /) '/,_ _ _/  ( ; -.    |    _ _\.-~        .-~~~^-.
+  (( / / )) ,-{        _      `-.|.-~-.           .~         `.
+ (( // / ))  '/\      /                 ~-. _ .-~      .-~^-.  \
+ (( /// ))      `.   {            }                   /      \  \
+  (( / ))     .----~-.\        \-'                 .~         \  `. \^-.
+             ///.----..>        \             _ -~             `.  ^-`  ^-_
+               ///-._ _ _ _ _ _ _}^ - - - - ~                     ~-- ,.-~
+                                                                  /.-~
+
+skipping: [bender]
+skipping: [fry]
+skipping: [zoidberg]
+skipping: [farnsworth]
+ ________________________________________________________
+/ TASK [Some task that runs ONLY on hosts that match our \
+\ conditional]                                           /
+ --------------------------------------------------------
+    \                                  ___-------___
+     \                             _-~~             ~~-_
+      \                         _-~                    /~-_
+             /^\__/^\         /~  \                   /    \
+           /|  O|| O|        /      \_______________/        \
+          | |___||__|      /       /                \          \
+          |          \    /      /                    \          \
+          |   (_______) /______/                        \_________ \
+          |         / /         \                      /            \
+           \         \^\\         \                  /               \     /
+             \         ||           \______________/      _-_       //\__//
+               \       ||------_-~~-_ ------------- \ --/~   ~\    || __/
+                 ~-----||====/~     |==================|       |/~~~~~
+                  (_(__/  ./     /                    \_\      \.
+                         (_(___/                         \_____)_)
+
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: NoneType: None
+fatal: [bender]: FAILED! => {"msg": "Unsupported parameters for (debug) module: when. Supported parameters include: msg, var, verbosity."}
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: NoneType: None
+fatal: [fry]: FAILED! => {"msg": "Unsupported parameters for (debug) module: when. Supported parameters include: msg, var, verbosity."}
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: NoneType: None
+fatal: [zoidberg]: FAILED! => {"msg": "Unsupported parameters for (debug) module: when. Supported parameters include: msg, var, verbosity."}
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: NoneType: None
+fatal: [farnsworth]: FAILED! => {"msg": "Unsupported parameters for (debug) module: when. Supported parameters include: msg, var, verbosity."}
+ ____________
+< PLAY RECAP >
+ ------------
+\                             .       .
+ \                           / `.   .' " 
+  \                  .---.  <    > <    >  .---.
+   \                 |    \  \ - ~ ~ - /  /    |
+         _____          ..-~             ~-..-~
+        |     |   \~~~\.'                    `./~~~/
+       ---------   \__/                        \__/
+      .'  O    \     /               /       \  " 
+     (_____,    `._.'               |         }  \/~~~/
+      `----.          /       }     |        /    \__/
+            `-.      |       /      |       /      `. ,~~|
+                ~-.__|      /_ - ~ ^|      /- _      `..-'   
+                     |     /        |     /     ~-.     `-. _  _  _
+                     |_____|        |_____|         ~ - . _ _ _ _ _>
+
+bender                     : ok=1    changed=0    unreachable=0    failed=1    skipped=3    rescued=0    ignored=0   
+farnsworth                 : ok=1    changed=0    unreachable=0    failed=1    skipped=3    rescued=0    ignored=0   
+fry                        : ok=1    changed=0    unreachable=0    failed=1    skipped=3    rescued=0    ignored=0   
+zoidberg                   : ok=1    changed=0    unreachable=0    failed=1    skipped=3    rescued=0    ignored=0   
+

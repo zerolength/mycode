@@ -27,4 +27,47 @@ sw-1
 sw-2
 
 [eosswitches:vars]
+ansible_network_os=eo
+
+[arista_witches]
+sw-1
+sw-2
+
+[arista_witches:vars]
+ansible_user=admin
 ansible_network_os=eos
+
+[arista_witches_2]
+;desc
+sw-1
+sw-2
+
+
+[arista_witches_2:vars]
+;desc
+ansible_network_os=eos
+ansible_connection=network_cli
+ansible_become=yes
+ansible_become_method=enable
+ansible_user=admin
+
+[cloud-hosts01]
+svr00 ansible_host=10.10.2.3 ansible_user=bender
+svr01 ansible_host=10.10.2.4 ansible_user=fry
+svr02 ansible_host=10.10.2.5 ansible_user=zoidberg
+
+[cloud-hosts01:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_ssh_pass=alta3
+
+[abc]
+alpha ansible_host=10.2.218.112 ansible_user=student
+bravo ansible_host=10.1.117.68 ansible_user=student
+charl ansible_host=10.4.28.106 ansible_user=student
+
+[abc:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+
+
+

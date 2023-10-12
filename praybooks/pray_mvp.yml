@@ -1,0 +1,55 @@
+---
+- name: install and gather fact
+  hosts: abc 
+  connection: ssh   # default is ssh
+  gather_facts: true # runs by default
+
+  tasks:
+    - name: Install steam locomotive on ALL machines
+      ansible.builtin.apt:
+        name: nsnake
+        state: present
+      become: yes # run as sudo
+      when: ansible_distribution == "Ubuntu"
+    - name: Install python textfsm
+      ansible.builtin.pip:
+        name: textfsm
+    - name: check if netmiko is installed
+      ansible.builtin.command: pip show netmiko
+      register: miko_env_check
+      ignore_errors: yes
+    - name: show installed python module
+      ansible.builtin.debug:
+        msg: "{{ miko_env_check}}"
+    - name: uninstall textfsm
+      ansible.builtin.pip:
+        name: textfsm
+        state: absent
+      ignore_errors: yes
+    - name: uninstall snake
+      ansible.builtin.apt:
+        name: nsnake
+        state: absent
+      ignore_errors: yes
+
+- name: Jinja template
+  hosts: abc
+  connection: ssh
+  gather_facts: false
+    
+  tasks:
+    - name: gather information hostname
+      debug:
+        msg: "{{ansible_nodename}}"
+      register: _name
+    - name: gather information mac addr
+      debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_default_ipv4.macaddress }}"
+      register: _type 
+    - name: jinja put
+      template:
+        src: ~/mycode/praybooks/templates/ip.info.j2    
+        dest: ~/ip.info
+
+- name: Include a play after another play
+  import_playbook: API_iss2.yml
