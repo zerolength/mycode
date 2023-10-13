@@ -70,6 +70,17 @@ charl ansible_host=10.4.28.106 ansible_user=student
 [abc:vars]
 ansible_python_interpreter=/usr/bin/python3
 
-
+[shieldedwitch]
+; description of our arista inventory
+sw-1         ansible_host=sw-1
+sw-2         ansible_host=sw-2
+    
+[shieldedwitch:vars]
+; variables specific to arista switches
+ansible_network_os=eos
+ansible_connection=network_cli
+ansible_become=yes
+ansible_become_method=enable
+ansible_user=admin
 
 
