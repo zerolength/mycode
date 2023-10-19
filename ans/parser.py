@@ -10,7 +10,7 @@ def importer(filename):
     with open(filename, "r") as stream:
         try:
             assembly = yaml.safe_load(stream)
-            print(assembly)
+            #print(assembly)
         except yaml.YAMLError as exc:
             print(exc)
     return assembly
@@ -166,11 +166,19 @@ def main ():
     subprocess.call(['echo','\'net.ipv4.ip_forward','=','1\n','net.ipv6.conf.default.forwarding','=','1\n','net.ipv6.conf.all.forwarding','=','1\'','|','sudo','tee','/etc/sysctl.d/10-ip-forwarding.conf'])
 
 
+
+    print("Showing up bridges")
+    subprocess.call(['sudo','brctl','show'])
+    
     routers = assembly ['routers']
     rholder = []
     for object in routers: #missing nexthop
         new_router = Router (rname = object['name'], interfaces = object['interfaces'])
         rholder.append(new_router)
+
+    print("Showing Created Namespaces...")
+    subprocess.call(['sudo','ip','netns'])
+    
     hosts = asssembly ['hosts']
     hholder = []
     for host in hosts: #missiong vlan, need to implement dhcp
