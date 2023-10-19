@@ -44,18 +44,27 @@ def link_ns (entity,linkname, ip):
     #sudo ip link set orout2crout netns orouter
     #[ns1,ns2] = interface['name'].split("-to-") #need testning I rather change the yaml
     [ns1,ns2] = custom_split(linkname)
+    
+
+    print(f"split {linkname} {ns1}, {ns2}")
+#    rlinkname = ns2+'2'+ns1
     if  ns1 == None:
         ns1 = entity
-    if ns2 == None:
+    
         ns2 = 'loopback'
-    if len(linkname) > 15:
-        linkname = ns1[:5]+'2'+ns2[:5]
+    linkname = ns1[:5]+'2'+ns2[:5]
+    rlinkname = ns2[:5]+'2'+ns1[:5]
         
     if ns2 != 'loopback':
-        subprocess.run(["sudo","ip","link","add",linkname,"type","veth","peer","name",linkname])
-        subprocess.run(["sudo","ip","link","set",linkname,"netns",ns1])
+        subprocess.run(["sudo","ip","link","add",linkname,"type","veth","peer","name", rlinkname])
+        print (f"{linkname} {ns1} {ns2}")
+        subprocess.run(["sudo","ip","link","set",linkname,"netns",entity])
+        if "brdg" in ns2:
+            subprocess.run(["sudo","ip","link","set","dev", rlinkname, "master", ns2)
+        subprocess.run(["sudo","ip","link","set",rlinkname,"netns",ns2)
+
     else: 
-        print(f"badlink: {entity}{linkname}")
+        print(f"badlink: {entity} {linkname}")
 #        subprocess.run(["sudo","ip","link","set",linkname,"netns",ns2])
 
     return linkname
@@ -77,9 +86,11 @@ class Subnet (): #create bridge when bridge is true
         print(self.nsname)
         print(self.bridge)
         if self.bridge == True:
+            brname = self.nsname[0]+'bridge'
         #subprocess.call(['sudo','ip','link','add','name',bridges['name'] + 'brdg','type','bridge'])
-            subprocess.call(['sudo','ip','link','add','name', nsname,'type','bridge'])
-            subprocess.call(['sudo','ip','link','set','dev', nsname,'up'])
+            subprocess.call(['sudo','ip','link','add','name', brname,'type','bridge'])
+            print(f"br {nsname}")
+            subprocess.call(['sudo','ip','link','set','dev', brname,'up'])
 
 
     def change_ip(new):
@@ -88,17 +99,27 @@ class Subnet (): #create bridge when bridge is true
 
     def __del__ (self):
         subprocess.run(["sudo","ip","link","del",self.nsname])
+        print(f"del {nsname}")
 
 
 class Router ():
     def __init__ (self, rname, interfaces):
         self.rname = rname
         #sudo ip netns add ohost
+        #    subprocess.call(['sudo','ip','link','add',routers['name'] + '2' + routers['ds_bridge'],'type','veth','peer','name',routers['ds_bridge'] + '2' + routers['name']])
+        #    subprocess.call(['sudo','ip','link','set',routers['name'] + '2' + routers['ds_bridge'],'netns',routers['name']])
+        #    subprocess.call(['sudo','ip','link','set','dev',routers['ds_bridge'] + '2' + routers['name'],'master',routers['ds_bridge']])
+        #    subprocess.call(['sudo','ip','link','set','dev',routers['ds_bridge'] + '2' + routers['name'],'up'])
+        #subprocess.call(['sudo','ip','link','add','core' + '2' + routers['name'],'type','veth','peer','name',routers['name'] + '2' + 'core'])
+        #subprocess.call(['sudo','ip','link','set','core' + '2' + routers['name'],'netns','core'])
+        #subprocess.call(['sudo','ip','link','set',routers['name'] + '2' + 'core','netns',routers['name']])
+
         subprocess.run(["sudo","ip","netns","add",rname])
         self.inf = interfaces
         self.links = []
         for interface in interfaces:
             linkname = interface['name']
+            print(linkname)
             linkip = interface['ip']
             newlink=link_ns (self.rname,linkname,linkip)
             self.links.append(newlink)
@@ -139,6 +160,10 @@ def main ():
         sholder.append(new_subnets)
 #    print (sholder)
 
+    subprocess.call(['sudo','sysctl','net.bridge.bridge-nf-call-iptables=0'])
+    subprocess.call(['echo','\'net.ipv4.ip_forward','=','1\n','net.ipv6.conf.default.forwarding','=','1\n','net.ipv6.conf.all.forwarding','=','1\'','|','sudo','tee','/etc/sysctl.d/10-ip-forwarding.conf'])
+
+
     routers = assembly ['routers']
     rholder = []
     for object in routers: #missing nexthop
@@ -151,6 +176,8 @@ def main ():
         hholder.append[new_host]
     print(rholder)
     print(hholder)
+
+
 
     input("Press Enter to continue...you can check if netns is up")
 if __name__ == "__main__":
