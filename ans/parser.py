@@ -109,6 +109,7 @@ class Subnet (): #create bridge when bridge is true
 class Router ():
     def __init__ (self, rname, interfaces):
         self.rname = rname
+        print(self.rname)
         #sudo ip netns add ohost
         #    subprocess.call(['sudo','ip','link','add',routers['name'] + '2' + routers['ds_bridge'],'type','veth','peer','name',routers['ds_bridge'] + '2' + routers['name']])
         #    subprocess.call(['sudo','ip','link','set',routers['name'] + '2' + routers['ds_bridge'],'netns',routers['name']])
@@ -122,6 +123,7 @@ class Router ():
         self.inf = interfaces
         self.links = []
         for interface in interfaces:
+            print(interface)
             linkname = interface['name']
             print(linkname)
             linkip = interface['ip']
