@@ -50,20 +50,22 @@ def link_ns (entity,linkname, ip):
 #    rlinkname = ns2+'2'+ns1
     if  ns1 == None:
         ns1 = entity
-    
-        ns2 = 'loopback'
-    linkname = ns1[:5]+'2'+ns2[:5]
-    rlinkname = ns2[:5]+'2'+ns1[:5]
         
-    if ns2 != 'loopback':
+    if ns1 == 'loopback':
+        print("loopback")
+    
+    elif ns2 != None:
+        linkname = ns1[:5]+'2'+ns2[:5]
+        rlinkname = ns2[:5]+'2'+ns1[:5]
+    
         subprocess.run(["sudo","ip","link","add",linkname,"type","veth","peer","name", rlinkname])
         print (f"{linkname} {ns1} {ns2}")
         subprocess.run(["sudo","ip","link","set",linkname,"netns",entity])
         if "brdg" in ns2:
             subprocess.run(["sudo","ip","link","set","dev", rlinkname, "master", ns2)
         subprocess.run(["sudo","ip","link","set",rlinkname,"netns",ns2)
-
-    else: 
+    
+    else: #ns2 is none
         print(f"badlink: {entity} {linkname}")
 #        subprocess.run(["sudo","ip","link","set",linkname,"netns",ns2])
 
