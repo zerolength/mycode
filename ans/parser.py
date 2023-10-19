@@ -50,7 +50,8 @@ def link_ns (entity,linkname, ip):
 #    rlinkname = ns2+'2'+ns1
     if  ns1 == None:
         ns1 = entity
-        
+        linkname = ns1[:5]2ns2[:5]
+        return linkname
     if ns1 == 'loopback':
         print("loopback")
     
