@@ -184,7 +184,7 @@ def main ():
     print("Showing Created Namespaces...")
     subprocess.call(['sudo','ip','netns'])
     
-    hosts = asssembly ['hosts']
+    hosts = assembly ['hosts']
     hholder = []
     for host in hosts: #missiong vlan, need to implement dhcp
         new_host = Host (hname = host['name'], interfaces = object['interfaces'])
