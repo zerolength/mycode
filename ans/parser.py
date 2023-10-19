@@ -63,7 +63,7 @@ def link_ns (entity,linkname, ip):
         subprocess.run(["sudo","ip","link","set",linkname,"netns",entity])
         if "brdg" in ns2:
             subprocess.run(["sudo","ip","link","set","dev", rlinkname, "master", ns2])
-        subprocess.run(["sudo","ip","link","set",rlinkname,"netns",ns2)
+        subprocess.run(["sudo","ip","link","set",rlinkname,"netns",ns2])
     
     else: #ns2 is none
         print(f"badlink: {entity} {linkname}")
