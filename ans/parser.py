@@ -1,4 +1,4 @@
-#https://github.com/zerolength/NetworkAutomationProj/pull/8
+#https://github.com/zerolength/NetworkAutomationProj/pull/14
 #!/usr/bin/env python
 #parser.py
 import subprocess
@@ -173,15 +173,17 @@ class Router ():
         subprocess.run(["sudo","ip","netns","del",self.rname])
 
 class Host ():
-    def __init__(self, hname, interfaces,subnet):
+    def __init__(self, hname, interfaces):
         self.hname = hname
         self.inf= interfaces
+
+        subnet = interfaces[0]['subnet']
         self.subnet=subnet
-        self.droute=subnet
-        
+
         self.links = []
         
         subprocess.call (['sudo','ip','netns','add',hname])
+        
         for interface in interfaces:
             linkname = interface['name']
             linkip = interface['ip']
@@ -196,7 +198,6 @@ def main ():
 
     subnets = assembly ['subnets']
     sholder = {}
-#    print (subnets)
     for object in subnets:
         
         nsname = object['name']
@@ -205,8 +206,6 @@ def main ():
     
     subprocess.call(['sudo','sysctl','net.bridge.bridge-nf-call-iptables=0'])
     subprocess.call(['echo','\'net.ipv4.ip_forward','=','1\n','net.ipv6.conf.default.forwarding','=','1\n','net.ipv6.conf.all.forwarding','=','1\'','|','sudo','tee','/etc/sysctl.d/10-ip-forwarding.conf'])
-
-
 
     print("Showing up bridges")
     subprocess.call(['sudo','brctl','show'])
