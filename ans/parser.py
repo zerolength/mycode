@@ -43,6 +43,8 @@ def link_ns (entity,linkname, ip):
     #sudo ip link set crout2orout netns crouter
     #sudo ip link set orout2crout netns orouter
     #[ns1,ns2] = interface['name'].split("-to-") #need testning I rather change the yaml
+    if linkname == 'loopback':
+        return linkname
     [ns1,ns2] = custom_split(linkname)
     
 
@@ -52,8 +54,6 @@ def link_ns (entity,linkname, ip):
         ns1 = entity
         linkname = ns1[:5]+'2'+ns2[:5]
         return linkname
-    if ns1 == 'loopback':
-        print("loopback")
     
     elif ns2 != None:
         linkname = ns1[:5]+'2'+ns2[:5]
