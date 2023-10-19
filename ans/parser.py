@@ -103,7 +103,7 @@ class Subnet (): #create bridge when bridge is true
     def __del__ (self):
         if self.bridge == True:
             subprocess.run(["sudo","ip","link","del",self.nsname])
-            print(f"del {nsname}")
+            print(f"del {self.nsname}")
 
 
 class Router ():
