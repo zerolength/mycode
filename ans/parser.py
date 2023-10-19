@@ -121,6 +121,7 @@ class Router ():
 
         subprocess.run(["sudo","ip","netns","add",rname])
         self.inf = interfaces
+        print(self.inf)
         self.links = []
         for interface in interfaces:
             print(interface)
