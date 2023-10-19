@@ -149,8 +149,8 @@ hosts:  # list of hosts to create
       subnets: "yellow"
       bridge: "ybridge"
   - name: "whost"
-    - interfaces: 
-      if_name: "whostwobrg"
+    interfaces: 
+    - name: "whostwobrg"
       ip: "10.1.3.24"
       vlan: ""
       subnets: "white"
