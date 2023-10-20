@@ -6,15 +6,14 @@ import yaml
 import re
 import ipaddress
 
-def calculate_broadcast(ip_str, cidr_str):
+def calculate_last(ip_str, cidr_str):
     # Parse the IP address and CIDR notation
-    ip = ipaddress.IPv4Address(ip_str)
-    subnet = ipaddress.IPv4Network(ip_str + cidr_str, strict=False)
-    
+    ip_ = ip_str + cidr_str
+    ip = ipaddress.IPv4Network(ip_)
+      
     # Calculate the broadcast address
-    broadcast = ip | (~subnet.hostmask)
-    
-    return str(broadcast)
+    last = ip[-1]
+    return str(last)
 
 def importer(filename):
     with open(filename, "r") as stream:
@@ -61,18 +60,18 @@ def link_ns (entity,linkname, linkip):
 #   rlinkname = ns2+'2'+ns1
     if  ns1 == None:
         ns1 = entity
-        linkname = ns1[:5]+'2'+ns2[1]+'router'
-        fullip = linkname + '/30'
+        linkname = ns1+'2'+ns2[0]+'router'
+        fullip = linkip + '/30'
         return linkname
     
     elif ns2 != None:
-        linkname = ns1[:5]+'2'+ns2
-        rlinkname = ns2+'2'+ns1[:5]
+        linkname = ns1+'2'+ns2
+        rlinkname = ns2+'2'+ns1
     
         subprocess.run(["sudo","ip","link","add",linkname,"type","veth","peer","name", rlinkname])
         print (f"{linkname} {ns1} {ns2}")
         subprocess.run(["sudo","ip","link","set",linkname,"netns",entity])
-        if "brdg" in ns2:
+        if "bridge" in ns2:
             subprocess.run(["sudo","ip","link","set","dev", rlinkname, "master", ns2])
         subprocess.run(["sudo","ip","link","set",rlinkname,"netns",ns2])
         
@@ -122,7 +121,7 @@ class Subnet (): #create bridge when bridge is true
         self.ip = new
     def add_host(self,host):
         #sudo ip netns exec phost ip route add default via 10.1.1.1
-        hname=host.name
+        hname=host.hname
         subnetname=self.nsname
         subprocess.run(["sudo","ip","netns","exec",hname,"ip","route","add","default","via",self.gw])
         
@@ -161,13 +160,13 @@ class Router ():
     #routing
     #sudo ip netns exec crouter ip route add 10.1.1.0/24 via 10.1.5.2
     def add_net(self,subnetEdge,subnetCore):
-        broadcast = calculate_broadcast(subnetCore.ip, subnetCore.cidr)
-        subprocess.call(["sudo","ip","netns","exec",self.rname,"ip","route","add",subnetEdge.ip+subnetEdge.cidr,"via",broadcast])
+        last = calculate_last(subnetCore.ip, subnetCore.cidr)
+        subprocess.run(["sudo","ip","netns","exec",self.rname,"ip","route","add",subnetEdge.ip+subnetEdge.cidr,"via",last])
     
     #sudo ip netns exec prouter ip route add default via 10.1.5.1
     def add_default(self,router,subnetCore):
         rname = router.rname
-        subprocess.call(["sudo","ip","netns","exec",rname,"ip","route","add","default","via",subnetCore.gw])
+        subprocess.run(["sudo","ip","netns","exec",rname,"ip","route","add","default","via",subnetCore.gw])
     
     def __del__ (self):
         subprocess.run(["sudo","ip","netns","del",self.rname])
@@ -182,7 +181,7 @@ class Host ():
 
         self.links = []
         
-        subprocess.call (['sudo','ip','netns','add',hname])
+        subprocess.run (['sudo','ip','netns','add',hname])
         
         for interface in interfaces:
             linkname = interface['name']
@@ -204,11 +203,11 @@ def main ():
         new_subnet = Subnet (nsname=object['name'],bridge=object['bridge'],ip=object['subnet_ip'],cidr=object['cidr'],gw=object['gw'],dhcp_range=object['dhcp_range'])
         sholder[nsname] = new_subnet
     
-    subprocess.call(['sudo','sysctl','net.bridge.bridge-nf-call-iptables=0'])
-    subprocess.call(['echo','\'net.ipv4.ip_forward','=','1\n','net.ipv6.conf.default.forwarding','=','1\n','net.ipv6.conf.all.forwarding','=','1\'','|','sudo','tee','/etc/sysctl.d/10-ip-forwarding.conf'])
+    subprocess.run(['sudo','sysctl','net.bridge.bridge-nf-call-iptables=0'])
+    subprocess.run(['echo','\'net.ipv4.ip_forward','=','1\n','net.ipv6.conf.default.forwarding','=','1\n','net.ipv6.conf.all.forwarding','=','1\'','|','sudo','tee','/etc/sysctl.d/10-ip-forwarding.conf'])
 
     print("Showing up bridges")
-    subprocess.call(['sudo','brctl','show'])
+    subprocess.run(['sudo','brctl','show'])
     
     routers = assembly ['routers']
     rholder = {}
@@ -218,7 +217,7 @@ def main ():
         rholder[rname] = new_router
     print(rholder)
     print("Showing Created Namespaces...")
-    subprocess.call(['sudo','ip','netns'])
+    subprocess.run(['sudo','ip','netns'])
     
     hosts = assembly ['hosts']
     hholder = {}
@@ -232,12 +231,12 @@ def main ():
     #actual routing
     #add hosts 
     ##Need to pick the host's subnet property later
-    purplehost= hholder.get('phost')
-    yellohost= hholder.get('yhost')
-    whitehost= hholder.get('whost')
+    purplehost= hholder['phost']
+    yellohost= hholder['yhost']
+    whitehost= hholder['whost']
     oranghost= hholder.get('ohost')
-    sholder.get('purple').add_host(purplehost)
-    sholder.get('yellow').add_host(yellohost)
+    sholder['purple'].add_host(purplehost)
+    sholder['yellow'].add_host(yellohost)
     sholder.get('white').add_host(whitehost)
     sholder.get('orange').add_host(oranghost)
 
@@ -248,8 +247,8 @@ def main ():
     rholder.get('core').add_net(sholder.get('white'),sholder.get('white-core'))
     #add default from core subnets
 
-    rholder.get('core').add_default(rholder.get('purple'),sholder.get('purple-core'))
-    rholder.get('core').add_default(rholder.get('orange'),sholder.get('orange-core'))
+    rholder.get('core').add_default(rholder['purple'],sholder.get('purple-core'))
+    rholder.get('core').add_default(rholder['orange'],sholder.get('orange-core'))
     rholder.get('core').add_default(rholder.get('yellow'),sholder.get('yellow-core'))
     rholder.get('core').add_default(rholder.get('white'),sholder.get('white-core'))
 

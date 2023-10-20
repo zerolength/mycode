@@ -1,0 +1,58 @@
+Error: argument "pbridge" is wrong: Invalid "netns" value
+
+Error: argument "obridge" is wrong: Invalid "netns" value
+
+Error: argument "ybridge" is wrong: Invalid "netns" value
+
+Error: argument "wbridge" is wrong: Invalid "netns" value
+
+RTNETLINK answers: File exists
+RTNETLINK answers: File exists
+Cannot find device "wrout2wbridge"
+Error: argument "wbridge" is wrong: Invalid "netns" value
+
+Cannot find device "wrout2wbridge"
+Cannot find device "wrout2wbridge"
+RTNETLINK answers: File exists
+Cannot find device "wrout2core"
+RTNETLINK answers: File exists
+Cannot find device "wrout2core"
+Cannot find device "wrout2core"
+RTNETLINK answers: File exists
+Cannot find device "wrout2wbridge"
+Error: argument "wbridge" is wrong: Invalid "netns" value
+
+Cannot find device "wrout2wbridge"
+Cannot find device "wrout2wbridge"
+RTNETLINK answers: File exists
+Cannot find device "wrout2core"
+RTNETLINK answers: File exists
+Cannot find device "wrout2core"
+Cannot find device "wrout2core"
+RTNETLINK answers: File exists
+Cannot find device "wrout2wbridge"
+Error: argument "wbridge" is wrong: Invalid "netns" value
+
+Cannot find device "wrout2wbridge"
+Cannot find device "wrout2wbridge"
+RTNETLINK answers: File exists
+Cannot find device "wrout2core"
+RTNETLINK answers: File exists
+Cannot find device "wrout2core"
+Cannot find device "wrout2core"
+RTNETLINK answers: File exists
+Cannot find device "wrout2wbridge"
+Error: argument "wbridge" is wrong: Invalid "netns" value
+
+Cannot find device "wrout2wbridge"
+Cannot find device "wrout2wbridge"
+Traceback (most recent call last):
+  File "/home/student/mycode/ans/parser.py", line 260, in <module>
+    main()
+  File "/home/student/mycode/ans/parser.py", line 230, in main
+    input("Press Enter to continue...you can check if netns is up")
+KeyboardInterrupt
+Cannot find device "purple"
+Cannot find device "orange"
+Cannot find device "yellow"
+Cannot find device "white"

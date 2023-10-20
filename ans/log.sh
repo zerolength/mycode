@@ -134,7 +134,7 @@ split wrouter2wbridge wrouter, wbridge
 wrout2wbridge wrouter wbridge
 wrout2wbridge
 {'wrouter-to-core': 'wrout2core', 'wrouter2wbridge': 'wrout2wbridge'}
-{'core': <__main__.Router object at 0x7f99aa854790>, 'prouter': <__main__.Router object at 0x7f99aa854160>, 'orouter': <__main__.Router object at 0x7f99aa8547f0>, 'yrouter': <__main__.Router object at 0x7f99aa8541f0>, 'wrouter': <__main__.Router object at 0x7f99aa8547c0>}
+{'core': <__main__.Router object at 0x7f68def88790>, 'prouter': <__main__.Router object at 0x7f68def88160>, 'orouter': <__main__.Router object at 0x7f68def887f0>, 'yrouter': <__main__.Router object at 0x7f68def881f0>, 'wrouter': <__main__.Router object at 0x7f68def887c0>}
 Showing Created Namespaces...
 split wrouter-to-core wrouter, core
 wrout2core wrouter core
@@ -164,7 +164,7 @@ split wrouter2wbridge wrouter, wbridge
 wrout2wbridge wrouter wbridge
 wrout2wbridge
 ['wrout2core', 'wrout2wbridge']
-{'phost': <__main__.Host object at 0x7f99aa854250>, 'ohost': <__main__.Host object at 0x7f99aa854610>, 'yhost': <__main__.Host object at 0x7f99aa854460>, 'whost': <__main__.Host object at 0x7f99aa854700>}
+{'phost': <__main__.Host object at 0x7f68def88250>, 'ohost': <__main__.Host object at 0x7f68def88610>, 'yhost': <__main__.Host object at 0x7f68def88460>, 'whost': <__main__.Host object at 0x7f68def88700>}
 Press Enter to continue...you can check if netns is updel purple
 del orange
 del yellow
