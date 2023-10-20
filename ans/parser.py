@@ -73,7 +73,9 @@ def link_ns (entity,linkname, linkip):
         subprocess.run(["sudo","ip","link","set",linkname,"netns",entity])
         if "bridge" in ns2:
             subprocess.run(["sudo","ip","link","set","dev", rlinkname, "master", ns2])
-        subprocess.run(["sudo","ip","link","set",rlinkname,"netns",ns2])
+            subprocess.run(["sudo","ip","link","set","dev", rlinkname, "up"])
+        else:
+            subprocess.run(["sudo","ip","link","set",rlinkname,"netns",ns2])
         
         if ns1 == 'core' or ns2 == 'core':
             fullip = linkip + '/30'
@@ -83,8 +85,8 @@ def link_ns (entity,linkname, linkip):
         #sudo ip netns exec crouter ip link set dev crout2orout up
         #sudo ip netns exec crouter ip link set dev lo up
         subprocess.run(["sudo","ip","netns","exec",entity,"ip","addr","add",fullip, "dev", linkname])
-        subprocess.run(["sudo","ip","netns","exec",entity,"ip","link","set", "dev", linkname,"up"])
-        subprocess.run(["sudo","ip","netns","exec",entity,"ip","link","set", "dev", "lo","up"])
+        subprocess.run(["sudo","ip","netns","exec",ns2,"ip","link","set", "dev", rlinkname,"up"])
+        subprocess.run(["sudo","ip","netns","exec",ns2,"ip","link","set", "dev", "lo","up"])
     else: #ns2 is none
         print(f"badlink: {entity} {linkname}")
 #        subprocess.run(["sudo","ip","link","set",linkname,"netns",ns2])
@@ -168,8 +170,8 @@ class Router ():
         rname = router.rname
         subprocess.run(["sudo","ip","netns","exec",rname,"ip","route","add","default","via",subnetCore.gw])
     
-    def __del__ (self):
-        subprocess.run(["sudo","ip","netns","del",self.rname])
+    #def __del__ (self):
+    #    subprocess.run(["sudo","ip","netns","del",self.rname])
 
 class Host ():
     def __init__(self, hname, interfaces):

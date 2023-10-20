@@ -129,21 +129,21 @@ routers:   # describing object that can route and interface between subnets
 hosts:  # list of hosts to create
   - name: "phost" #only need interface  check IP against subnet
     interfaces: 
-    - name: "phost2pbridge"
+    - name: "phost2pbrg"
       ip: "10.1.1.21"
       vlan: ""
       subnets: "purple"
       bridge: "pbridge"
   - name: "ohost"
     interfaces:
-    - name: "ohost2obridge"
+    - name: "ohost2obrg"
       ip: "10.1.1.24"
       vlan: ""
       subnets: "orange"
       bridge: "obridge"
   - name: "yhost"
     interfaces: 
-    - name: "yhost2ybridge"
+    - name: "yhost2ybrg"
       ip: "10.1.2.24"
       vlan: ""
       subnets: "yellow"
