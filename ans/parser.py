@@ -5,6 +5,7 @@ import subprocess
 import yaml
 import re
 import ipaddress
+import time
 
 def calculate_last(ip_str, cidr_str):
     # Parse the IP address and CIDR notation
@@ -51,7 +52,7 @@ def link_ns (entity,linkname, linkip):
     #sudo ip link add crout2orout type veth peer name orout2crout
     #sudo ip link set crout2orout netns crouter
     #sudo ip link set orout2crout netns orouter
-    #[ns1,ns2] = interface['name'].split("-to-") #need testning I rather change the yaml
+    
     if linkname == 'loopback':
         return linkname
     [ns1,ns2] = custom_split(linkname)
@@ -69,12 +70,14 @@ def link_ns (entity,linkname, linkip):
         rlinkname = ns2+'2'+ns1
     
         subprocess.run(["sudo","ip","link","add",linkname,"type","veth","peer","name", rlinkname])
+        time.sleep (1)
         print (f"sudo ip link add {linkname} type veth peer name {ns2} 2 {ns1}")
-        subprocess.run(["sudo","ip","link","set",linkname,"netns",entity])
+        subprocess.run(["sudo","ip","link","set",linkname,"netns",ns1])
         if "bridge" in ns2:
+            
             subprocess.run(["sudo","ip","link","set","dev", rlinkname, "master", ns2])
             subprocess.run(["sudo","ip","link","set","dev", rlinkname, "up"])
-            print("bridge link")
+            
         else:
             subprocess.run(["sudo","ip","link","set",rlinkname,"netns",ns2])
         
@@ -102,8 +105,8 @@ def link_ns (entity,linkname, linkip):
         print("end ip")
     else: #ns2 is none
         print(f"badlink: {entity} {linkname}")
-#        subprocess.run(["sudo","ip","link","set",linkname,"netns",ns2])
-    #add ip
+
+
     
     return linkname
 
@@ -120,14 +123,12 @@ class Subnet (): #create bridge when bridge is true
         self.cidr = cidr
         self.gw = gw
         self.dhcp = dhcp_range #this need to be split into begin and end
-        #print(self.ip)
-        #print(self.nsname)
-        #print(self.bridge)
+
         if self.bridge == True:
             brname = self.nsname[0]+'bridge'
         #subprocess.call(['sudo','ip','link','add','name',bridges['name'] + 'brdg','type','bridge'])
             subprocess.run(['sudo','ip','link','add','name', brname,'type','bridge'])
-            print(f"br {brname}")
+            
             subprocess.run(['sudo','ip','link','set','dev', brname,'up'])
 
 
@@ -153,23 +154,23 @@ class Router ():
         self.rname = rname
         print(self.rname)
 
-        subprocess.call(["sudo","ip","netns","add",rname])
+        subprocess.run(["sudo","ip","netns","add",rname])
         #sudo ip netns exec orouter sysctl -p /etc/sysctl.d/10-ip-forwarding.conf
-        subprocess.call(["sudo","ip","netns","exec",rname,"sysctl","-p","/etc/sysctl.d/10-ip-forwarding.conf"])
+        subprocess.run(["sudo","ip","netns","exec",rname,"sysctl","-p","/etc/sysctl.d/10-ip-forwarding.conf"])
         
         self.inf = interfaces
         print(self.inf)
         self.links = {}
         #connect interfaces
         for interface in interfaces:
-            print(interface)
+            
             linkname = interface['name']
             print(linkname)
             linkip = interface['ip']
-            
+                        
             newlink=link_ns (self.rname,linkname,linkip)
             self.links[linkname]=newlink
-            #print (newlink)
+            
         print (self.links)
         
     #routing
@@ -190,21 +191,22 @@ class Host ():
     def __init__(self, hname, interfaces):
         self.hname = hname
         self.inf= interfaces
-
-        subnet = interfaces[0]['subnet']
-        self.subnet=subnet
-
+        first = interfaces[0]
+        self.subnet = first['subnets']
+        
         self.links = []
         
-        subprocess.run (['sudo','ip','netns','add',hname])
+        subprocess.run (['sudo','ip','netns','add',self.hname])
         
         for interface in interfaces:
+            
             linkname = interface['name']
             linkip = interface['ip']
+            print(linkname)
             newlink = link_ns(self.hname,linkname,linkip)
             
             self.links.append(newlink)
-            #print(newlink)
+            print(newlink)
         print (self.links)
 def main ():
     filename = "network_topology.yml"
@@ -239,7 +241,7 @@ def main ():
     hholder = {}
     for host in hosts: #missiong vlan, need to implement dhcp
         hname = host['name']
-        new_host = Host (hname = host['name'], interfaces = object['interfaces'])
+        new_host = Host (hname = host['name'], interfaces = host['interfaces'])
         hholder[hname]=new_host
     print(hholder)
     input("Press Enter to continue...you can check if netns is up")
