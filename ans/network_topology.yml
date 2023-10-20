@@ -150,7 +150,7 @@ hosts:  # list of hosts to create
       bridge: "ybridge"
   - name: "whost"
     interfaces: 
-    - name: "whostwobrg"
+    - name: "whost2wbridge"
       ip: "10.1.3.24"
       vlan: ""
       subnets: "white"
