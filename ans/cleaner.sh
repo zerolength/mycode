@@ -28,16 +28,16 @@ for link in $all_links; do
     fi
 done
 
-!/bin/bash
+# Get a list of all network links
+all_links=$(ip -o link show | awk -F ": " '{print $2}' | awk -F "@" '{print $1}')
 
-# # Get a list of all network links
-# all_links=$(ip -o link show | awk -F ": " '{print $2}')
+# Iterate through all links and delete each one
+for link in $all_links; do
+    ip link delete "$link"
+    echo "Deleted link: $link"
+done
 
-# # Iterate through all links and delete each one
-# for link in $all_links; do
-#     ip link delete "$link"
-#     echo "Deleted link: $link"
-# done
+echo "All network links have been removed."
 
 echo "All network links have been removed."
 

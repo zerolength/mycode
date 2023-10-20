@@ -82,12 +82,24 @@ def link_ns (entity,linkname, linkip):
             fullip = linkip + '/30'
         else:
             fullip = linkip + '/24'
+        #sudo ip link add yrouter2core type veth peer name core2yrouter
         #sudo ip netns exec yrouter ip addr add 10.1.5.6/30 dev yrout2crout
-        #sudo ip netns exec crouter ip link set dev crout2orout up
-        #sudo ip netns exec crouter ip link set dev lo up
-        subprocess.run(["sudo","ip","netns","exec",entity,"ip","addr","add",fullip, "dev", linkname])
-        subprocess.run(["sudo","ip","netns","exec",ns2,"ip","link","set", "dev", rlinkname,"up"])
-        subprocess.run(["sudo","ip","netns","exec",ns2,"ip","link","set", "dev", "lo","up"])
+        #sudo ip netns exec yrouter ip link set dev yrout2crout up
+        #sudo ip netns exec yrouter ip link set dev lo up
+
+        #sudo ip netns exec wrouter ip addr add 10.1.3.1/24 dev wrout2wbrg
+        #sudo ip netns exec wrouter ip link set dev wrout2wbrg up
+        #sudo ip netns exec wrouter ip link set dev lo up
+
+        #sudo ip netns exec ohost ip addr add 10.1.4.21/24 dev ohost2obrg
+        #sudo ip netns exec ohost ip link set dev ohost2obrg up
+        #sudo ip netns exec ohost ip link set dev lo up#sudo ip netns exec pbridge ip link set dev pbridge2prouter up
+        #
+        print("ip problems") 
+        subprocess.run(["sudo","ip","netns","exec",ns1,"ip","addr","add",fullip, "dev", linkname])
+        subprocess.run(["sudo","ip","netns","exec",ns1,"ip","link","set", "dev", linkname,"up"])
+        subprocess.run(["sudo","ip","netns","exec",ns1,"ip","link","set", "dev", "lo","up"])
+        print("end ip")
     else: #ns2 is none
         print(f"badlink: {entity} {linkname}")
 #        subprocess.run(["sudo","ip","link","set",linkname,"netns",ns2])
@@ -210,6 +222,7 @@ def main ():
     subprocess.run(['echo','\'net.ipv4.ip_forward','=','1\n','net.ipv6.conf.default.forwarding','=','1\n','net.ipv6.conf.all.forwarding','=','1\'','|','sudo','tee','/etc/sysctl.d/10-ip-forwarding.conf'])
 
     print("Showing up bridges")
+    print(sholder)
     subprocess.run(['sudo','brctl','show'])
     
     routers = assembly ['routers']
