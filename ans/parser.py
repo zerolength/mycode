@@ -13,7 +13,7 @@ def calculate_last(ip_str, cidr_str):
     ip = ipaddress.IPv4Network(ip_)
       
     # Calculate the broadcast address
-    last = ip[-1]
+    last = ip[-2]
     return str(last)
 
 def importer(filename):
@@ -140,6 +140,7 @@ class Subnet (): #create bridge when bridge is true
         hname=host.hname
         subnetname=self.nsname
         subprocess.run(["sudo","ip","netns","exec",hname,"ip","route","add","default","via",self.gw])
+        print(f"sudo ip netns exec {hname} ip route add default via {self.gw}")
         
         
 
@@ -177,11 +178,14 @@ class Router ():
     #sudo ip netns exec crouter ip route add 10.1.1.0/24 via 10.1.5.2
     def add_net(self,subnetEdge,subnetCore):
         last = calculate_last(subnetCore.ip, subnetCore.cidr)
+        print(f"sudo ip netns exec {self.rname} ip route add {subnetEdge.ip}{subnetEdge.cidr} via {last}")
         subprocess.run(["sudo","ip","netns","exec",self.rname,"ip","route","add",subnetEdge.ip+subnetEdge.cidr,"via",last])
+        
     
     #sudo ip netns exec prouter ip route add default via 10.1.5.1
-    def add_default(self,router,subnetCore):
-        rname = router.rname
+    def add_default(self,subnetCore):
+        rname = self.rname
+        print(f"sudo ip netns exec {self.rname} ip route add default via {subnetCore.gw}")
         subprocess.run(["sudo","ip","netns","exec",rname,"ip","route","add","default","via",subnetCore.gw])
     
     #def __del__ (self):
@@ -254,21 +258,24 @@ def main ():
     whitehost= hholder['whost']
     oranghost= hholder.get('ohost')
     sholder['purple'].add_host(purplehost)
+    print("purple add to subnet")
     sholder['yellow'].add_host(yellohost)
     sholder.get('white').add_host(whitehost)
     sholder.get('orange').add_host(oranghost)
 
     #add route to core
     rholder.get('core').add_net(sholder.get('purple'),sholder.get('purple-core'))
+    
     rholder.get('core').add_net(sholder.get('orange'),sholder.get('orange-core'))
     rholder.get('core').add_net(sholder.get('yellow'),sholder.get('yellow-core'))
     rholder.get('core').add_net(sholder.get('white'),sholder.get('white-core'))
     #add default from core subnets
 
-    rholder.get('core').add_default(rholder['purple'],sholder.get('purple-core'))
-    rholder.get('core').add_default(rholder['orange'],sholder.get('orange-core'))
-    rholder.get('core').add_default(rholder.get('yellow'),sholder.get('yellow-core'))
-    rholder.get('core').add_default(rholder.get('white'),sholder.get('white-core'))
+    prouterr=holder['prouter']
+    prouter.add_default(sholder.get('purple-core'))
+    rholder['orouter'].add_default(sholder.get('orange-core'))
+    rholder['yrouter'].add_default(sholder.get('yellow-core'))
+    rholder['crouter'].add_default(sholder.get('white-core'))
 
 
 
