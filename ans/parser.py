@@ -273,10 +273,14 @@ def main ():
 
     prouterr=holder['prouter']
     prouter.add_default(sholder.get('purple-core'))
-    rholder['orouter'].add_default(sholder.get('orange-core'))
-    rholder['yrouter'].add_default(sholder.get('yellow-core'))
-    rholder['crouter'].add_default(sholder.get('white-core'))
+    orouter=rholder['orouter']
+    orouter.add_default(sholder.get('orange-core'))
+    yrouter=rholder['yrouter']
+    yrouter.add_default(sholder.get('yellow-core'))
+    wrouter=rholder['wrouter']
+    wrouter.add_default(sholder.get('white-core'))
 
+# need to add default specific for core
 
 
 
