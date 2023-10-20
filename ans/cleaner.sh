@@ -16,17 +16,31 @@ links_to_keep="lo ens3 docker0 vethb132fcc@if4 br-95097e7166ed veth39916af@if27 
 # Get a list of all network links
 all_links=$(ip link show | awk -F ": " '{print $2}')
 
-# Iterate through all links
+Iterate through all links
 for link in $all_links; do
     # Check if the current link is in the list of links to keep
     if [[ $links_to_keep == *"$link"* ]]; then
         echo "Keeping link: $link"
     else
         # Delete the link
-        ip link delete "$link"
+        sudo ip link delete "$link"
         echo "Deleted link: $link"
     fi
 done
+
+!/bin/bash
+
+# # Get a list of all network links
+# all_links=$(ip -o link show | awk -F ": " '{print $2}')
+
+# # Iterate through all links and delete each one
+# for link in $all_links; do
+#     ip link delete "$link"
+#     echo "Deleted link: $link"
+# done
+
+echo "All network links have been removed."
+
 
 echo "Network links have been cleaned."
 

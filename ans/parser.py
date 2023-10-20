@@ -69,11 +69,12 @@ def link_ns (entity,linkname, linkip):
         rlinkname = ns2+'2'+ns1
     
         subprocess.run(["sudo","ip","link","add",linkname,"type","veth","peer","name", rlinkname])
-        print (f"{linkname} {ns1} {ns2}")
+        print (f"sudo ip link add {linkname} type veth peer name {ns2} 2 {ns1}")
         subprocess.run(["sudo","ip","link","set",linkname,"netns",entity])
         if "bridge" in ns2:
             subprocess.run(["sudo","ip","link","set","dev", rlinkname, "master", ns2])
             subprocess.run(["sudo","ip","link","set","dev", rlinkname, "up"])
+            print("bridge link")
         else:
             subprocess.run(["sudo","ip","link","set",rlinkname,"netns",ns2])
         
@@ -107,14 +108,14 @@ class Subnet (): #create bridge when bridge is true
         self.cidr = cidr
         self.gw = gw
         self.dhcp = dhcp_range #this need to be split into begin and end
-        print(self.ip)
-        print(self.nsname)
-        print(self.bridge)
+        #print(self.ip)
+        #print(self.nsname)
+        #print(self.bridge)
         if self.bridge == True:
             brname = self.nsname[0]+'bridge'
         #subprocess.call(['sudo','ip','link','add','name',bridges['name'] + 'brdg','type','bridge'])
             subprocess.run(['sudo','ip','link','add','name', brname,'type','bridge'])
-            print(f"br {nsname}")
+            print(f"br {brname}")
             subprocess.run(['sudo','ip','link','set','dev', brname,'up'])
 
 
@@ -156,7 +157,7 @@ class Router ():
             
             newlink=link_ns (self.rname,linkname,linkip)
             self.links[linkname]=newlink
-            print (newlink)
+            #print (newlink)
         print (self.links)
         
     #routing
@@ -191,7 +192,7 @@ class Host ():
             newlink = link_ns(self.hname,linkname,linkip)
             
             self.links.append(newlink)
-            print(newlink)
+            #print(newlink)
         print (self.links)
 def main ():
     filename = "network_topology.yml"
