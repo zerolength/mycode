@@ -212,6 +212,34 @@ class Host ():
             self.links.append(newlink)
             print(newlink)
         print (self.links)
+
+# from mark rodriguez        
+def configure_nat():
+    # sudo ip link add crout2nat type veth peer name nat2crout
+    # sudo ip link set crout2nat netns crouter
+    subprocess.call(['sudo','ip','link','add','core2nat','type','veth','peer','name','nat2core'])
+    subprocess.call(['sudo','ip','link','set','core2nat','netns','core'])
+
+    subprocess.call(['sudo','ip','netns','exec','core','ip','addr','add','10.1.5.17/30','dev','core2nat'])
+    subprocess.call(['sudo','ip','netns','exec','core','ip','link','set','dev','core2nat','up'])
+
+    subprocess.call(['sudo','ip','addr','add','10.1.5.18/30','dev','nat2core'])
+
+    subprocess.call(['sudo','ip','addr','add','192.168.90.3/24','dev','pbridge2prouter'])
+    subprocess.call(['sudo','ip','addr','add','192.168.90.4/24','dev','pbridge'])
+
+    subprocess.call(['sudo','iptables','-t','nat','-F'])
+    subprocess.call(['sudo','iptables','-t','nat','-A','POSTROUTING','-s','10.1.0.0/16','-o','ens3','-j','MASQUERADE']) 
+    subprocess.call(['sudo','iptables','-t','filter','-A','FORWARD','-i','ens3','-o','nat2core','-j','ACCEPT'])  
+    subprocess.call(['sudo','iptables','-t','filter','-A','FORWARD','-o','ens3','-i','nat2core','-j','ACCEPT'])
+    subprocess.call(['sudo','ip','route','add','10.1.0.0/16','via','10.1.5.17']) 
+
+    subprocess.call(['sudo','iptables','-t','filter','-A','FORWARD','-i','ens3','-o','nat2crout','-j','ACCEPT'])  
+    subprocess.call(['sudo','iptables','-t','filter','-A','FORWARD','-o','ens3','-i','nat2crout','-j','ACCEPT'])
+    subprocess.call(['sudo','ip','netns','exec','core','ip','route','add','default','via','10.1.5.18']) 
+
+
+
 def main ():
     filename = "network_topology.yml"
     assembly = importer(filename)
@@ -265,13 +293,12 @@ def main ():
 
     #add route to core
     rholder.get('core').add_net(sholder.get('purple'),sholder.get('purple-core'))
-    
     rholder.get('core').add_net(sholder.get('orange'),sholder.get('orange-core'))
     rholder.get('core').add_net(sholder.get('yellow'),sholder.get('yellow-core'))
     rholder.get('core').add_net(sholder.get('white'),sholder.get('white-core'))
     #add default from core subnets
 
-    prouterr=holder['prouter']
+    prouter=holder['prouter']
     prouter.add_default(sholder.get('purple-core'))
     orouter=rholder['orouter']
     orouter.add_default(sholder.get('orange-core'))
@@ -282,7 +309,8 @@ def main ():
 
 # need to add default specific for core
 
-
+# deploy nat
+    configure_nat()
 
 if __name__ == "__main__":
     main()
