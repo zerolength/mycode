@@ -108,7 +108,7 @@ routers:   # describing object that can route and interface between subnets
   - name: "yrouter"
     interfaces:
       - name: "yrouter-to-core"
-        ip: "10.1.5.9"
+        ip: "10.1.5.6"
         subnet: ""
       - name: "yrouter2ybridge"
         ip: "10.1.2.1"

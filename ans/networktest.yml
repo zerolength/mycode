@@ -1,0 +1,45 @@
+---
+- name: Testing network ping functionality
+  hosts: localhost
+  connection: local
+  gather_facts: false
+ #file by rodriguezmarkd
+  vars:
+    hostnames:
+      - yhost
+      - phost
+      - ohost
+      - whost
+
+  tasks:
+  - name: IP Configuration Readout from Each Host
+    raw: "sudo ip netns exec {{ item }} ip -c link | grep -A 2 {{ item }}"
+    register: ipdata
+    loop: "{{ hostnames }}"
+
+  - name: Show IP Data
+    debug:
+      var: ipdata
+
+  - name: Pinging Outward
+    raw: "sudo ip netns exec {{ item }} ping -c 2 8.8.8.8"
+    register: outpings
+    loop: "{{ hostnames }}"
+
+  - name: Show Pings to 8.8.8.8
+    debug:
+      var: outpings
+
+  - name: Pinging from hosts to core router
+    raw: "sudo ip netns exec {{ item }} ping -c 2 10.1.5.17"
+    register: result
+    loop: "{{ hostnames }}"
+
+  - name: Show Core Router Connectivity
+    debug:
+        var: result
+
+  - name: Outputting results to file networktestresults.log...
+    ansible.builtin.copy:
+      content: "{{ ipdata }} {{ outpings }} {{ result }}"
+      dest: networktestresults.log

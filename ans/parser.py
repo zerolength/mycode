@@ -61,10 +61,16 @@ def link_ns (entity,linkname, linkip):
 #   rlinkname = ns2+'2'+ns1
     if  ns1 == None:
         ns1 = entity
-        linkname = ns1+'2'+ns2[0]+'router'
+        ns2 = ns2[0]+'router'
+        linkname = ns1+'2'+ns2
         fullip = linkip + '/30'
-        return linkname
-    
+        rlinkname = ns2+'2'+ns1
+        print (f"sudo ip link add {linkname} type veth peer name {rlinkname}")
+        subprocess.run(["sudo", "ip", "link", "add", linkname, "type", "veth", "peer","name", rlinkname])
+        subprocess.run(["sudo","ip","link","set",linkname,"netns",ns1])
+        subprocess.run(["sudo","ip","link","set",rlinkname,"nets",ns2])
+        
+
     elif ns2 != None:
         linkname = ns1+'2'+ns2
         rlinkname = ns2+'2'+ns1
@@ -98,13 +104,19 @@ def link_ns (entity,linkname, linkip):
         #sudo ip netns exec ohost ip link set dev ohost2obrg up
         #sudo ip netns exec ohost ip link set dev lo up#sudo ip netns exec pbridge ip link set dev pbridge2prouter up
         #
-        print("ip problems") 
-        subprocess.run(["sudo","ip","netns","exec",ns1,"ip","addr","add",fullip, "dev", linkname])
-        subprocess.run(["sudo","ip","netns","exec",ns1,"ip","link","set", "dev", linkname,"up"])
-        subprocess.run(["sudo","ip","netns","exec",ns1,"ip","link","set", "dev", "lo","up"])
-        print("end ip")
+
     else: #ns2 is none
         print(f"badlink: {entity} {linkname}")
+
+    print("ip problems") 
+    print(f"sudo ip netns exec {ns1} ip addr add {fullip} dev {linkname}")
+    subprocess.run(["sudo","ip","netns","exec",ns1,"ip","addr","add",fullip, "dev", linkname])
+    print(f"sudo ip netns exec {ns1} ip link set dev {linkname} up")
+    subprocess.run(["sudo","ip","netns","exec",ns1,"ip","link","set", "dev", linkname,"up"])
+    print(f"sudo ip netns exec {ns1} ip link set dev lo up")
+    subprocess.run(["sudo","ip","netns","exec",ns1,"ip","link","set", "dev", "lo","up"])
+    print("end ip")
+
 
 
     
@@ -148,12 +160,13 @@ class Subnet (): #create bridge when bridge is true
         if self.bridge == True:
             subprocess.run(["sudo","ip","link","del",self.nsname])
             print(f"del {self.nsname}")
-
+        else:
+            print(f"not deleted since there is no ns")
 
 class Router ():
     def __init__ (self, rname, interfaces):
         self.rname = rname
-        print(self.rname)
+        #print(self.rname)
 
         subprocess.run(["sudo","ip","netns","add",rname])
         #sudo ip netns exec orouter sysctl -p /etc/sysctl.d/10-ip-forwarding.conf
@@ -166,13 +179,13 @@ class Router ():
         for interface in interfaces:
             
             linkname = interface['name']
-            print(linkname)
+            #print(linkname)
             linkip = interface['ip']
                         
             newlink=link_ns (self.rname,linkname,linkip)
             self.links[linkname]=newlink
             
-        print (self.links)
+        #print (self.links)
         
     #routing
     #sudo ip netns exec crouter ip route add 10.1.1.0/24 via 10.1.5.2
@@ -206,12 +219,12 @@ class Host ():
             
             linkname = interface['name']
             linkip = interface['ip']
-            print(linkname)
+            #print(linkname)
             newlink = link_ns(self.hname,linkname,linkip)
             
-            self.links.append(newlink)
-            print(newlink)
-        print (self.links)
+            #self.links.append(newlink)
+            #print(newlink)
+        #print (self.links)
 
 # from mark rodriguez        
 def configure_nat():
@@ -244,7 +257,7 @@ def main ():
     filename = "network_topology.yml"
     assembly = importer(filename)
 
-    subnets = assembly ['subnets']
+    subnets = assembly ['subnets'] 
     sholder = {}
     for object in subnets:
         
@@ -256,7 +269,7 @@ def main ():
     subprocess.run(['echo','\'net.ipv4.ip_forward','=','1\n','net.ipv6.conf.default.forwarding','=','1\n','net.ipv6.conf.all.forwarding','=','1\'','|','sudo','tee','/etc/sysctl.d/10-ip-forwarding.conf'])
 
     print("Showing up bridges")
-    print(sholder)
+    #print(sholder)
     subprocess.run(['sudo','brctl','show'])
     
     routers = assembly ['routers']
@@ -266,8 +279,8 @@ def main ():
         new_router = Router (rname = object['name'], interfaces = object['interfaces'])
         rholder[rname] = new_router
     print(rholder)
-    print("Showing Created Namespaces...")
-    subprocess.run(['sudo','ip','netns'])
+    #print("Showing Created Namespaces...")
+    #subprocess.run(['sudo','ip','netns'])
     
     hosts = assembly ['hosts']
     hholder = {}
@@ -275,7 +288,7 @@ def main ():
         hname = host['name']
         new_host = Host (hname = host['name'], interfaces = host['interfaces'])
         hholder[hname]=new_host
-    print(hholder)
+    #print(hholder)
     input("Press Enter to continue...you can check if netns is up")
 
     #actual routing
@@ -298,7 +311,7 @@ def main ():
     rholder.get('core').add_net(sholder.get('white'),sholder.get('white-core'))
     #add default from core subnets
 
-    prouter=holder['prouter']
+    prouter=rholder['prouter']
     prouter.add_default(sholder.get('purple-core'))
     orouter=rholder['orouter']
     orouter.add_default(sholder.get('orange-core'))
