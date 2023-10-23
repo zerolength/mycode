@@ -57,15 +57,17 @@ cp /var/kvm/images/beachhead.img /var/kvm/images/beachhead2.img
 
 sudo mkdir /var/log/qemu
 
-KEY1=$(cat ~/.ssh/id_rsa.pub)
+export KEY1="$(cat ~/.ssh/id_rsa.pub)"
 
 MAC=$(printf "aa:a3:a3:%02x:%02x:%02x\n" $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
 
 MAC2=$(printf "aa:a3:a3:%02x:%02x:%02x\n" $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
 
-echo $KEY1
+#echo $KEY1
 
 cd /var/kvm/images
+
+sudo apt-get install cloud-image-utils
 
 echo 'instance-id: sdn-1-test
 local-hostname:sdn-1-test' | sudo tee meta-data-1.yaml
@@ -78,6 +80,14 @@ cloud-localds cloud-init-1.iso user-data.yaml meta-data-1.yaml --network-config=
 cloud-localds cloud-init-2.iso user-data.yaml meta-data-2.yaml --network-config=net-config-2.yaml
 
 sudo /sbin/iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE
+
+sudo /sbin/iptables -A FORWARD -i ens3 -o pbridge -m state  --state RELATED,ESTABLISHED -j ACCEPT
+
+sudo /sbin/iptables -A FORWARD -i pbridge -o ens3 -j ACCEPT
+
+sudo /sbin/iptables -A FORWARD -i ens3 -o obridge -m state  --state RELATED,ESTABLISHED -j ACCEPT
+
+sudo /sbin/iptables -A FORWARD -i obridge -o ens3 -j ACCEPT
 
 sudo /sbin/iptables -A FORWARD -i ens3 -o br0 -m state  --state RELATED,ESTABLISHED -j ACCEPT
 
@@ -94,9 +104,9 @@ sudo /usr/bin/qemu-system-x86_64 \
    -smp cpus=1 \
    -m 1G \
    -net nic,netdev=tap1,macaddr=$MAC1 \
-   -netdev bridge,id=tap1,br=br0\
+   -netdev bridge,id=tap1,br=pbridge\
    -d int \
-   -D /var/log/qemu/qemu-1.log
+   -D /var/log/qemu/qemu-1.log &
 
 sudo /usr/bin/qemu-system-x86_64 \
    -enable-kvm \
@@ -106,7 +116,7 @@ sudo /usr/bin/qemu-system-x86_64 \
    -nographic \
    -smp cpus=1 \
    -m 1G \
-   -net nic,netdev=tap1,macaddr=$MAC2 \
-   -netdev bridge,id=tap1,br=br0\
+   -net nic,netdev=tap2,macaddr=$MAC2 \
+   -netdev bridge,id=tap2,br=obridge\
    -d int \
-   -D /var/log/qemu/qemu-2.log
+   -D /var/log/qemu/qemu-2.log &
